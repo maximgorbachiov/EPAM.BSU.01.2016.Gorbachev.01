@@ -3,21 +3,11 @@ using System.Collections.Generic;
 
 namespace Sorter
 {
-    static public class BubbleSort
+    public class BubbleSortInterfaceOnDelegate
     {
-        private class Comparator : IComparer<int[]>
-        {
-            public Comparator2 comparatorDelegate;
+        public delegate int Comparator1(int[] arr1, int[] arr2);
 
-            public int Compare(int[] x, int[] y)
-            {
-                return comparatorDelegate(x, y);
-            }
-        }
-
-        public delegate int Comparator2(int[] arr1, int[] arr2);
-
-        static public void Sort(int[][] sourceArray, IComparer<int[]> comparator)
+        static public void Sort(int[][] sourceArray, Comparator1 comparator)
         {
             if (sourceArray == null)
             {
@@ -39,7 +29,7 @@ namespace Sorter
                         {
                             if (sourceArray[j].Length > 0)
                             {
-                                if (comparator.Compare(sourceArray[j], sourceArray[j + 1]) > 0)
+                                if (comparator(sourceArray[j], sourceArray[j + 1]) > 0)
                                 {
                                     Swap(ref sourceArray[j], ref sourceArray[j + 1]);
                                 }
@@ -54,12 +44,9 @@ namespace Sorter
             }
         }
 
-        static public void Sort(int[][] sourceArray, Comparator2 comparatorDelegate)
+        static public void Sort(int[][] sourceArray, IComparer<int[]> comparator)
         {
-            Comparator comparator = new Comparator();
-
-            comparator.comparatorDelegate = comparatorDelegate;
-            Sort(sourceArray, comparator);
+            Sort(sourceArray, comparator.Compare);
         }
 
         static private void Swap(ref int[] array1, ref int[] array2)
